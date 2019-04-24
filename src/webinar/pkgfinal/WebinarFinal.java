@@ -25,10 +25,14 @@ public class WebinarFinal {
      * @param args the command line arguments
      */     
     public static void main(String[] args) {  
+        // Инициализируем списки
+        List<Student> studList = null;
+        List<Specialty> specList = null;
         // Открываем соединение с БД
         SQLiteDB db = new SQLiteDB("wfinal");
         Scanner scanner = new Scanner(System.in);
-
+        
+        
         System.out.println("Ожидаем ввода команды... (/help для списка)");
         boolean isProcessing = true;
         
@@ -38,7 +42,8 @@ public class WebinarFinal {
             if (!inList.isEmpty()) {
                 switch (inList.get(0).toLowerCase()) {
                     case "/exportall":
-                        
+                        studList = db.selectAllStudents();
+                        specList = db.selectAllSpecialties();
                         break;
                     case "/addstudent":
                         try {
@@ -50,7 +55,7 @@ public class WebinarFinal {
                         break;
                     case "/addspecialty":
                         try {
-                            Specialty spec = new Specialty(inList.get(1), inList.get(2));
+                            Specialty spec = new Specialty(0, inList.get(1), inList.get(2));
                             db.insertSpecialty(spec.getName(), spec.getDescription());                           
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println("Для добавления специальности необходимо указать все параметры!");
@@ -58,7 +63,7 @@ public class WebinarFinal {
                         break;                    
                     case "/getstudentsbyspec":
                         try {
-                            List<Student> studList = db.selectStudentsBySpecialty(inList.get(1));
+                            List<Student> studListSpec = db.selectStudentsBySpecialty(inList.get(1));
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println("Для данного выбора необходимо указать специальность!");
                         } 
@@ -73,10 +78,18 @@ public class WebinarFinal {
                         } 
                         break;
                     case "/importfromjson":
-
+                        try {
+                            studList = MyJSON.importFromJSON(inList.get(1));
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("Укажите путь читаемого файла!");
+                        } 
                         break;
                     case "/exporttojson":
-
+                        try {
+                            MyJSON.exportToJSON(studList, inList.get(1));
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("Укажите путь сохраняемого файла!");
+                        } 
                         break;
                     case "/exit":
                         isProcessing = false;

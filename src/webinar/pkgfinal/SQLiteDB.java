@@ -77,6 +77,42 @@ public class SQLiteDB {
         }            
     }
     
+    // Выбор всех студентов
+    public List<Student> selectAllStudents() {
+        List<Student> studList = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT st.id AS studid, st.name AS studname, sp.name AS specname, st.score "
+                                                       + "FROM student st "
+                                                       + "INNER JOIN specialty sp ON st.specialty_id = sp.id");     
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Student stud = new Student(rs.getInt("studid"), rs.getString("studname"), rs.getString("specname"), rs.getFloat("score"));
+                studList.add(stud);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+        }      
+        
+        return studList;        
+    }
+    
+    // Выбор всех специальностей
+    public List<Specialty> selectAllSpecialties() {
+        List<Specialty> specList = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT id, name, description FROM specialty");     
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Specialty spec = new Specialty(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
+                specList.add(spec);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+        }      
+        
+        return specList;        
+    }
+    
     // Выбор студентов по специальности
     public List<Student> selectStudentsBySpecialty(String specialty) {
         List<Student> studList = new ArrayList<>();
