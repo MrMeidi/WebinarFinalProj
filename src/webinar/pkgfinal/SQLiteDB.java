@@ -7,6 +7,7 @@ package webinar.pkgfinal;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -146,6 +147,60 @@ public class SQLiteDB {
         }      
         
         return avgScore;
+    }
+
+    public void insertStudentsMass(List<Student> studList) {
+        int idSpec = 0;
+        int studAdded = 0;
+        int studIgnored = 0;
+        Iterator<Student> studIt = studList.iterator();
+        
+        try {
+            conn.setAutoCommit(false);
+            PreparedStatement psInsert = conn.prepareStatement("INSERT INTO student "
+                                                             + "(name, specialty_id, score) "
+                                                             + "VALUES (?, ?, ?)");  
+            
+            while (studIt.hasNext()) {
+                Student stud = studIt.next();
+                try {
+                    PreparedStatement psSelect = conn.prepareStatement("SELECT id FROM specialty "
+                                                                     + "WHERE name = ?");     
+                    psSelect.setString(1, stud.getSpecialty());
+                    ResultSet rs = psSelect.executeQuery();
+                    while (rs.next()) {
+                        idSpec = rs.getInt("id");
+                        // Ignore student if specialty does not exist.
+                        if (idSpec != 0) {
+                            psInsert.setString(1, stud.getName());
+                            psInsert.setInt(2, idSpec);
+                            psInsert.setFloat(3, stud.getScore());
+                            psInsert.addBatch();
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error when selecting data from Specialty table! " + e);
+                } 
+            }
+
+            int[] insertUpdates = psInsert.executeBatch();
+            for (int i = 0; i < insertUpdates.length; i++) {
+                if (insertUpdates[i] == -2) {
+                    studIgnored++;
+                } else {
+                    studAdded++;
+                }
+            }
+
+            System.out.println("JSON processed! Students added: " + studAdded + ". "
+                             + "Students ignored due to faulty specialty: " + studIgnored + ".");     
+            
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (SQLException e) {
+            System.out.println("Error when inserting students from JSON! " + e);
+        }
+
     }
     
     public void close() {

@@ -13,7 +13,7 @@ public class Help {
     private static final String[] HELP = { "/addSpecialty [name] [description] - Insert a new specialty to the database.",
                                            "/addStudent [name] [specialty] [avg_score] - Insert a new student to the database.",
                                            "/exit - Quit the application.",
-                                           "/exportAll - Export all data from the database to Object lists.",
+                                           "/exportAll [show] - Export all data from the database to Object lists.",
                                            "/exportToJson [filepath] - Export the Student list to a JSON file.", 
                                            "/getAvgScoreBySpec [specialty] - Show the average score of all students with the specified specialty.",
                                            "/getStudentsBySpec [specialty] - Show a list of students with the specified specialty.",

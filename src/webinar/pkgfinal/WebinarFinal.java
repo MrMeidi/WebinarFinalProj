@@ -39,6 +39,16 @@ public class WebinarFinal {
                     case "/exportall":
                         studList = db.selectAllStudents();
                         specList = db.selectAllSpecialties();
+                        if (inList.get(1).toLowerCase().equals("show")) {
+                            System.out.println("Student List:");
+                            for (Student st : studList) {
+                                System.out.println(st.getID() + "|" + st.getName() + "|" + st.getSpecialty() + "|" + st.getScore());
+                            }   
+                            System.out.println("Specialty List:");
+                            for (Specialty sp : specList) {
+                                System.out.println(sp.getID() + "|" + sp.getName() + "|" + sp.getDescription());
+                            }   
+                        }
                         break;
                     case "/addstudent":
                         try {
@@ -59,6 +69,9 @@ public class WebinarFinal {
                     case "/getstudentsbyspec":
                         try {
                             List<Student> studListSpec = db.selectStudentsBySpecialty(inList.get(1));
+                            for (Student st : studListSpec) {
+                                System.out.println(st.getName() + "|" + st.getSpecialty() + "|" + st.getScore());
+                            }
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println("You must specify the specialty!");
                         } 
@@ -75,6 +88,7 @@ public class WebinarFinal {
                     case "/importfromjson":
                         try {
                             studList = MyJSON.importFromJSON(inList.get(1));
+                            db.insertStudentsMass(studList);
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println("You must specify the filepath!");
                         } 

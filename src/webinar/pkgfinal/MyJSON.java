@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,10 +31,11 @@ public class MyJSON {
     }
     
     public static List<Student> importFromJSON(String path) {
-        List<Student> studList = new ArrayList<>();
+        List<Student> studList = null;
         Gson gson = new Gson();
         try (Reader re = new FileReader(path)) {
             Student[] stud = gson.fromJson(re, Student[].class);
+            studList = new ArrayList(Arrays.asList(stud));
             // Finish up list export + DB insertions
         } catch (NullPointerException | IOException e) {
             System.out.println("Error reading JSON: " + e.toString());
