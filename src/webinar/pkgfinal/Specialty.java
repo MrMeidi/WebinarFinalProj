@@ -6,7 +6,7 @@
 package webinar.pkgfinal;
 
 /**
- * ID, Название, Описание
+ *
  * @author Meidi
  */
 public class Specialty {

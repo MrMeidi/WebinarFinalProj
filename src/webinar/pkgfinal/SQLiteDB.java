@@ -28,7 +28,6 @@ public class SQLiteDB {
         }   
     }
      
-    // Добавление студента (также добавляет специальность, если таковой нет)
     public void insertStudent(String name, String specialty, float avg_score) {
         int idSpec = 0;
         
@@ -41,11 +40,11 @@ public class SQLiteDB {
                 idSpec = rs.getInt("id");
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+            System.out.println("Error when selecting data from Specialty table! " + e);
         }
         
         if (idSpec == 0) {
-            System.out.println("Указанная специальность не существует! Студент не был добавлен.");
+            System.out.println("Specified specialty does not exist! Student was ignored.");
         } else {
             try {
                 PreparedStatement ps = conn.prepareStatement("INSERT INTO student "
@@ -55,14 +54,13 @@ public class SQLiteDB {
                  ps.setInt(2, idSpec);
                  ps.setFloat(3, avg_score);
                  ps.executeUpdate();
-                 System.out.println("Студент успешно добавлен в БД."); 
+                 System.out.println("New student was successfully added to the corresponding table."); 
             } catch (SQLException e) {
-                System.out.println("Ошибка вставки записи в таблицу студентов! " + e);
+                System.out.println("Error when inserting data to Student table! " + e);
             }            
         }        
     }
     
-    // Добавление специальности
     public void insertSpecialty(String name, String description) {
         try {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO specialty "
@@ -71,13 +69,12 @@ public class SQLiteDB {
              ps.setString(1, name);
              ps.setString(2, description);
              ps.executeUpdate();
-             System.out.println("Специальность успешно добавлена в БД."); 
+             System.out.println("New specialty was successfully added to the corresponding table."); 
         } catch (SQLException e) {
-            System.out.println("Ошибка вставки записи в таблицу специальностей! " + e);
+            System.out.println("Error when inserting data to Specialty table! " + e);
         }            
     }
     
-    // Выбор всех студентов
     public List<Student> selectAllStudents() {
         List<Student> studList = new ArrayList<>();
         try {
@@ -90,13 +87,12 @@ public class SQLiteDB {
                 studList.add(stud);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+            System.out.println("Error when selecting data! " + e);
         }      
         
         return studList;        
     }
     
-    // Выбор всех специальностей
     public List<Specialty> selectAllSpecialties() {
         List<Specialty> specList = new ArrayList<>();
         try {
@@ -107,13 +103,12 @@ public class SQLiteDB {
                 specList.add(spec);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+            System.out.println("Error when selecting data from Specialty table! " + e);
         }      
         
         return specList;        
     }
     
-    // Выбор студентов по специальности
     public List<Student> selectStudentsBySpecialty(String specialty) {
         List<Student> studList = new ArrayList<>();
         try {
@@ -128,7 +123,7 @@ public class SQLiteDB {
                 studList.add(stud);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+            System.out.println("Error when selecting data! " + e);
         }      
         
         return studList;
@@ -147,19 +142,18 @@ public class SQLiteDB {
                 avgScore = rs.getFloat("avg_score");
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка выбора из таблицы специальностей! " + e);
+            System.out.println("Error when selecting data! " + e);
         }      
         
         return avgScore;
     }
     
-    // Закрытие соединения
     public void close() {
         try {
            stmt.close();
            conn.close();
         } catch ( SQLException e ) {
-           System.out.println("Ошибка закрытия соединения с БД! " + e);
+           System.out.println("Error when trying to close database connection! " + e);
            System.exit(0);
         }      
     }

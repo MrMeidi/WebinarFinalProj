@@ -12,11 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Загрузить все объекты из БД в память (в List объектов соответствующего типа). 
- * Добавление студента в БД. 
- * Вывести список студентов по названию специальности. 
- * Посчитать средний балл студентов, указанной специальности.
- * Импорт списка объектов из JSON в БД. Экспорт списка объектов из БД в JSON.
+ * 
  * @author Meidi
  */
 public class WebinarFinal {
@@ -25,15 +21,14 @@ public class WebinarFinal {
      * @param args the command line arguments
      */     
     public static void main(String[] args) {  
-        // Инициализируем списки
+        // Initialize lists
         List<Student> studList = null;
         List<Specialty> specList = null;
-        // Открываем соединение с БД
+        // Open DB connection
         SQLiteDB db = new SQLiteDB("wfinal");
         Scanner scanner = new Scanner(System.in);
         
-        
-        System.out.println("Ожидаем ввода команды... (/help для списка)");
+        System.out.println("Waiting for input.. (/help to show commands)");
         boolean isProcessing = true;
         
         while (isProcessing) {
@@ -50,7 +45,7 @@ public class WebinarFinal {
                             Student stud = new Student(0, inList.get(1), inList.get(2), Float.parseFloat(inList.get(3)));
                             db.insertStudent(stud.getName(), stud.getSpecialty(), stud.getScore());                            
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Для добавления студента необходимо указать все параметры!");
+                            System.out.println("You must specify all parameters for this command!");
                         }
                         break;
                     case "/addspecialty":
@@ -58,14 +53,14 @@ public class WebinarFinal {
                             Specialty spec = new Specialty(0, inList.get(1), inList.get(2));
                             db.insertSpecialty(spec.getName(), spec.getDescription());                           
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Для добавления специальности необходимо указать все параметры!");
+                            System.out.println("You must specify all parameters for this command!");
                         }
                         break;                    
                     case "/getstudentsbyspec":
                         try {
                             List<Student> studListSpec = db.selectStudentsBySpecialty(inList.get(1));
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Для данного выбора необходимо указать специальность!");
+                            System.out.println("You must specify the specialty!");
                         } 
                         break;
                     case "/getavgscorebyspec":
@@ -74,21 +69,21 @@ public class WebinarFinal {
                             System.out.println("Средний балл студентов по специальности " 
                                              + inList.get(1) + ": " + avgScore + ".");
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Для данного выбора необходимо указать специальность!");
+                            System.out.println("You must specify the specialty!");
                         } 
                         break;
                     case "/importfromjson":
                         try {
                             studList = MyJSON.importFromJSON(inList.get(1));
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Укажите путь читаемого файла!");
+                            System.out.println("You must specify the filepath!");
                         } 
                         break;
                     case "/exporttojson":
                         try {
                             MyJSON.exportToJSON(studList, inList.get(1));
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Укажите путь сохраняемого файла!");
+                            System.out.println("You must specify the filepath!");
                         } 
                         break;
                     case "/exit":
@@ -104,7 +99,7 @@ public class WebinarFinal {
         db.close();
     }  
     
-    // Разделение строки по пробелу с учётом двойных кавычек (" ")
+    // Split, but spaces between quotes are ignored
     private static List<String> splitWithQuotes(String in) {
         List<String> inList = new ArrayList<>();
         Matcher match = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(in);

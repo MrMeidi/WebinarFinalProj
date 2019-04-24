@@ -23,9 +23,9 @@ public class MyJSON {
         try (Writer wr = new FileWriter(path)) {          
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(studList, wr);
-            System.out.println("Файл JSON был успешно сохранён.");
+            System.out.println("JSON was successfully saved.");
         } catch (NullPointerException | IOException e) {
-            System.out.println("Ошибка сохранения файла JSON: " + e.toString());
+            System.out.println("Error saving JSON: " + e.toString());
         }
     }
     
@@ -34,9 +34,9 @@ public class MyJSON {
         Gson gson = new Gson();
         try (Reader re = new FileReader(path)) {
             Student[] stud = gson.fromJson(re, Student[].class);
-            // Дописать вывод списка + инсерты в БД
+            // Finish up list export + DB insertions
         } catch (NullPointerException | IOException e) {
-            System.out.println("Ошибка чтения файла JSON: " + e.toString());
+            System.out.println("Error reading JSON: " + e.toString());
         }
         
         return studList;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ID, Имя, Специальность, Средний балл по учебной программе
+ * 
  * @author Meidi
  */
 public class Student {

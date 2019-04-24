@@ -6,19 +6,19 @@
 package webinar.pkgfinal;
 
 /**
- * Класс с информацией о командах
+ * Class with help info
  * @author Meidi
  */
 public class Help {
-    private static final String[] HELP = { "/addSpecialty [name] [description] - добавить специальность в БД.",
-                                           "/addStudent [name] [specialty] [avg_score] - добавить студента в БД.",
-                                           "/exit - завершение работы с приложением.",
-                                           "/exportAll - выгрузить все объекты из БД.",
-                                           "/exportToJson [filepath] - экспорт списка объектов из БД в JSON.", 
-                                           "/getAvgScoreBySpec [specialty] - вывести средний балл студентов по специальности.",
-                                           "/getStudentsBySpec [specialty] - вывести список студентов по специальности.",
-                                           "/help - вывод информации о всех командах.",
-                                           "/importFromJson [filepath] - импорт списка объектов из JSON в БД." };    
+    private static final String[] HELP = { "/addSpecialty [name] [description] - Insert a new specialty to the database.",
+                                           "/addStudent [name] [specialty] [avg_score] - Insert a new student to the database.",
+                                           "/exit - Quit the application.",
+                                           "/exportAll - Export all data from the database to Object lists.",
+                                           "/exportToJson [filepath] - Export the Student list to a JSON file.", 
+                                           "/getAvgScoreBySpec [specialty] - Show the average score of all students with the specified specialty.",
+                                           "/getStudentsBySpec [specialty] - Show a list of students with the specified specialty.",
+                                           "/help - Show information about all available commands.",
+                                           "/importFromJson [filepath] - import Student list from a JSON file to the database." };    
       
     public static String getText() {
         String helpString = "";   
